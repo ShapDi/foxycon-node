@@ -1,29 +1,35 @@
-from foxycon import Search, StatisticianSocNet
+import asyncio
 
-from service.search_process import SearchProcess
-from settings import LINK
+from foxycon import  StatisticianSocNet
+from foxycon.search_services.search import YouTubeSearch1
 
-# proxy = [
-#     "http://shapdi:8b3yGiQBjy1D@93.183.125.176:3128",
-#     "http://shapdi2:BVZzY5xENsN1@194.246.82.177:3128",
-# ]
+from management_collected.standart_api.youtube import send_single_data_to_server
+from settings import parameters_col
 
-def start_search():
-    search_object = Search(subtitles=True, proxy=None)
-    statistic_object = StatisticianSocNet( subtitles=True)
+proxy = [
+    parameters_col.PROXY_ONE,
+    parameters_col.PROXY_TWO,
+]
 
-    list_proces = []
-
-    for link in LINK.split(','):
-        print(link)
-        sp = SearchProcess(link=link, search_object=search_object, statistic_object=statistic_object)
-        list_proces.append(sp)
-
-    for sp in list_proces:
-        sp.start()
+ssn = StatisticianSocNet(
+    proxy=proxy,
+)
 
 
-
+async def main_corut():
+    data = await YouTubeSearch1(ssn).search_recommendation_async("https://youtube.com/watch?v=2go20LlmIRc")
+    async for i in data():
+        for data_txt in i:
+            print(data_txt)
+            try:
+                await send_single_data_to_server(data_txt)
+            except Exception as ex:
+                print(ex)
+                for text in data_txt:
+                    try:
+                        await send_single_data_to_server(text)
+                    except:
+                        continue
 
 if __name__ == '__main__':
-    start_search()
+    asyncio.run(main_corut())

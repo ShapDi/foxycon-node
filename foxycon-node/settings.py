@@ -1,18 +1,39 @@
+import json
+import logging.config
 import os
 
-from dotenv import load_dotenv
+from dotenv import dotenv_values
+from types import SimpleNamespace
 
-load_dotenv()
+config_file_path = os.path.join(os.path.dirname(__file__), "logging_config.json")
 
-TEST = False
+with open(config_file_path, "r") as file:
+    configs = json.load(file)
+    logging.config.dictConfig(configs)
 
-LINK = os.getenv("LINK")
+logger = logging.getLogger(__name__)
 
-HOST_DATABASE = os.getenv("HOST_DATABASE")
-PORT_DATABASE = os.getenv("PORT_DATABASE")
-NAME_DATABASE = os.getenv("NAME_DATABASE")
-USER_DATABASE = os.getenv("USER_DATABASE")
-PASSWORD_DATABASE = os.getenv("PASSWORD_DATABASE")
 
-SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://{USER_DATABASE}:{PASSWORD_DATABASE}@{HOST_DATABASE}:{PORT_DATABASE}/{NAME_DATABASE}"
+TEST = True
 
+
+def get_parameters():
+    config = dotenv_values(".env")
+    parameters = {}
+
+    for key, value in config.items():
+        parts = key.split("_")
+        if TEST:
+            if parts[0] == "TEST":
+                parameters["_".join(parts[1:])] = value
+        else:
+            if parts[0] != "TEST":
+                parameters["_".join(parts)] = value
+
+    return SimpleNamespace(**parameters)
+
+
+parameters_col = get_parameters()
+
+
+logger.info(parameters_col)
