@@ -17,7 +17,7 @@ ssn = StatisticianSocNet(
 
 
 async def main_corut():
-    data = await YouTubeSearch1(ssn).search_recommendation_async("https://www.youtube.com/watch?v=tk-zdYbaO6Y")
+    data = await YouTubeSearch1(ssn).search_recommendation_async(parameters_col.LINK)
     async for i in data():
         for data_txt in i:
             print(data_txt)

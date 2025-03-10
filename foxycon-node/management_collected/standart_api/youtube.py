@@ -4,6 +4,8 @@ from typing import Optional
 import httpx
 from pydantic import BaseModel
 
+from settings import parameters_col
+
 
 class Auth(BaseModel):
     key: str
@@ -45,6 +47,6 @@ async def send_single_data_to_server(data):
         publish_date=data.publish_date,  # Должен быть формат ISO 8601
         subtitles=data.subtitles if data.subtitles else None,
     )
-        response = await client.post("http://127.0.0.1:2222/youtube/add_full_data_video", json=data.model_dump(mode='json'), timeout=30.0)
+        response = await client.post(f"h{parameters_col.BACK_URL}/youtube/add_full_data_video", json=data.model_dump(mode='json'), timeout=30.0)
         print(response.status_code)
         print(response.text)
