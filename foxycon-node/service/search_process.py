@@ -1,19 +1,16 @@
+import asyncio
 from foxycon import Search
 from foxycon import StatisticianSocNet
 from data_structures.schemes import YoutubeChannels, ContentsYoutube, InstagramPages, ContentsInstagram
 
 from multiprocessing import Process
 
-proxy = [
-    "http://shapdi:8b3yGiQBjy1D@93.183.125.176:3128",
-    "http://shapdi2:BVZzY5xENsN1@194.246.82.177:3128",
-]
 
 class SearchProcess(Process):
     def __init__(self, search_object: Search, link:str, statistic_object: StatisticianSocNet):
         super().__init__()
-        self._search_object = search_object
         self._link = link
+        self._search_object = search_object
         self._statistic_object = statistic_object
 
 
@@ -31,12 +28,12 @@ class SearchProcess(Process):
 
                 await ContentsYoutube(system_id=data.system_id, title=data.title, link=data.link,
                                       number_views=data.views, number_likes=data.likes,
-                                      view_content=data.analytics_obj.content_type, release_date=data.publish_date,
+                                      types_content=data.analytics_obj.content_type, release_date=data.publish_date,
                                       youtube_channels_id=channel_id).add_contents_youtube()
             else:
                 await ContentsYoutube(system_id=data.system_id, title=data.title, link=data.link,
                                       number_views=data.views, number_likes=data.likes,
-                                      view_content=data.analytics_obj.content_type, release_date=data.publish_date,
+                                      types_content=data.analytics_obj.content_type, release_date=data.publish_date,
                                       youtube_channels_id=cn.id).add_contents_youtube()
 
         elif data.analytics_obj.social_network == 'instagram':
@@ -66,7 +63,14 @@ class SearchProcess(Process):
                                         instagram_page_id=cn.id
                                         ).add_contents_instagram()
 
-    async def run(self):
-        search = await Search(proxy=proxy, subtitles=True).search('https://www.youtube.com/watch?v=yydTXyC9StM&t=139s')
-        async for i in search():
-            print(i)
+    async def starts(self):
+        print(self._link)
+        search = await self._search_object.search(self._link)
+        async for content in search():
+            print(content)
+            for data in content[1]:
+                print(data)
+                await self.get_data(data, self._statistic_object)
+
+    def run(self):
+        asyncio.run(self.starts())

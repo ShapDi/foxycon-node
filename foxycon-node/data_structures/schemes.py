@@ -1,12 +1,12 @@
 import datetime
-from sqlalchemy import ForeignKey, String, Integer, Text, Date
+from sqlalchemy import ForeignKey, String, Text, Date, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy import select, text
 import uuid
 from uuid import UUID
 
-from engine import get_session_factory
+from data_structures.engine import get_session_factory
 
 Base: DeclarativeMeta = declarative_base()
 
@@ -24,8 +24,8 @@ class YoutubeChannels(Base):
     system_id: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     name: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     link: Mapped[str] = mapped_column(String, nullable=True, unique=False)
-    views: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
-    subscribers: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
+    views: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
+    subscribers: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
     country: Mapped[str] = mapped_column(String, nullable=True, unique=False)
 
     contents = relationship("ContentsYoutube", back_populates="youtube_channel")
@@ -58,7 +58,7 @@ class InstagramPages(Base):
     system_id: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     name: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     link: Mapped[str] = mapped_column(String, nullable=True, unique=False)
-    subscribers: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
+    subscribers: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
 
     contents = relationship("ContentsInstagram", back_populates="instagram_page")
 
@@ -91,9 +91,9 @@ class ContentsYoutube(Base):
     title: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     link: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     types_content: Mapped[str] = mapped_column(String, nullable=True, unique=False)
-    number_views: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
-    number_likes: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
-    number_comments: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
+    number_views: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
+    number_likes: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
+    number_comments: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
     updating_data: Mapped[Date] = mapped_column(Date, default=datetime.datetime.utcnow(),
                                                 server_default=text("TIMEZONE('utc', now())"), nullable=True,
                                                 unique=False)
@@ -132,9 +132,9 @@ class ContentsInstagram(Base):
     title: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     link: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     types_content: Mapped[str] = mapped_column(String, nullable=True, unique=False)
-    number_views: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
-    number_likes: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
-    number_comments: Mapped[int] = mapped_column(Integer, nullable=True, unique=False)
+    number_views: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
+    number_likes: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
+    number_comments: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=False)
     view_content: Mapped[str] = mapped_column(String, nullable=True, unique=False)
     updating_data: Mapped[Date] = mapped_column(Date, default=datetime.datetime.utcnow(),
                                                 server_default=text("TIMEZONE('utc', now())"), nullable=True,

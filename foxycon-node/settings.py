@@ -6,6 +6,8 @@ load_dotenv()
 
 TEST = False
 
+LINK = os.getenv("LINK")
+
 HOST_DATABASE = os.getenv("HOST_DATABASE")
 PORT_DATABASE = os.getenv("PORT_DATABASE")
 NAME_DATABASE = os.getenv("NAME_DATABASE")
