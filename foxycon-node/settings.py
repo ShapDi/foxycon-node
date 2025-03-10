@@ -7,11 +7,7 @@ from types import SimpleNamespace
 
 config_file_path = os.path.join(os.path.dirname(__file__), "logging_config.json")
 
-with open(config_file_path, "r") as file:
-    configs = json.load(file)
-    logging.config.dictConfig(configs)
 
-logger = logging.getLogger(__name__)
 
 
 TEST = True
@@ -36,4 +32,4 @@ def get_parameters():
 parameters_col = get_parameters()
 
 
-logger.info(parameters_col)
+
