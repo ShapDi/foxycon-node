@@ -11,6 +11,8 @@ foxycon = {git = "ssh://git@github.com/ShapDi/foxycon.git"}
 pydentic = "^0.0.1.dev3"
 httpx = "^0.28.1"
 python-dotenv = "^1.0.1"
+yt-dlp = "^2025.2.19"
+faster-whisper = "^1.1.1"
 
 
 [build-system]

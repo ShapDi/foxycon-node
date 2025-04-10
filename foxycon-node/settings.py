@@ -10,7 +10,7 @@ config_file_path = os.path.join(os.path.dirname(__file__), "logging_config.json"
 
 
 
-TEST = True
+TEST = False
 
 
 def get_parameters():
